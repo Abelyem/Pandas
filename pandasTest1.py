@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 df = pd.read_csv('pokemon_data.csv')
 
@@ -144,9 +145,39 @@ print(df.loc[(df['Type 1'] == "Grass") & (df['Type 2'] == "Poison")])
 # Filters through to bring back Pokemons which have Type 1 = Grass OR Type 2 = Poison
 print(df.loc[(df['Type 1'] == "Grass") | (df['Type 2'] == "Poison")]) 
 
+# Filters and returns names that contain 'mega'
+print(df.loc[df['Name'].str.contains('Mega')])
+
+**
+# Filters and returns names that DO NOT contain 'mega' (refer to ~ sign written prior to df)
+# Did not work at time of testing - cannot find any docs on this
+print(~df.loc[df['Name'].str.contains('Mega')])
+**
+
+# Filters through Type 1 to get EITHER Fire OR Grass Pokemons
+# second filter looks through Type 2 to make sure its a Flying Pokemon
+#Conditions = FLYING (Type 2) POKEMON THAT HAS TO BE FIRE OR GRASS BASED (Type 1)
+print(df.loc[df['Type 1'].str.contains('Fire|Grass', regex=True) & df['Type 2'].str.contains('Flying')])
+
+
+#Same as above (Finds either Fire OR Grass pokemons) 
+# flags=re.I -- allows it to ignore the case so we can do fire|grass and
+# it still finds any capitalized version (data source has Fire / Grass as Type 1)
+print(df.loc[df['Type 1'].str.contains('fire|grass', regex=True, flags=re.I)])
+
+# Filters through all Names and finds any name which has 'pi' in it (anywhere in the name)
+print(df.loc[df['Name'].str.contains('pi[a-z]*', flags=re.I, regex=True)])
+
+
+# Filters through all Names and finds any name which has 'pi' in it 
+# HOWEVER due to '^' it means the name MUST begin with Pi (^ = start of line)
+print(df.loc[df['Name'].str.contains('^pi[a-z]*', flags=re.I, regex=True)])
+
 """
 
 
-# Filtering out all names that contain 'mega'
 
-print(df.loc[df['Name'].str.contains('Mega')])
+"""
+******************** CONDITIONAL CHANGES ********************
+
+"""
